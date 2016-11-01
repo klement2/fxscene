@@ -2318,12 +2318,14 @@ long TXSCWindow::onCmdTreeItemPaste(FXObject* obj, FXSelector s, void* ptr)
     if (clippboardBr == NULL)
         return 0;
 
+    if (xscDefSurface == NULL)
+        xscDefSurface = new TDSurf(SurfConst[1], new MYFXName("Green"));
+
     if (o.getFirst() == NULL) {
         TDTreeBranchItem *br;
 
         br = o.insertFirstBranch(new TDBase(new MYFXName("Surfaces")));
         ((TDBase*)br->getData())->flags |= F_SURFACE;
-        xscDefSurface = new TDSurf(SurfConst[1], new MYFXName("Green"));
         o.insertFirst(xscDefSurface, br);
         br = o.appendBranch(new TDBase(new MYFXName("Lights")), br);
         ((TDBase*)br->getData())->flags |= F_LIGHT;
@@ -2355,9 +2357,9 @@ long TXSCWindow::onCmdTreeItemPaste(FXObject* obj, FXSelector s, void* ptr)
     if (selectedTreeItem == NULL)
         return 0;
 
-    TDGroup *selobj = ((TDGroup*)selectedItem->getData());
-    if (selobj != NULL && selobj->getOtype() > TD_FIRST && selobj->getOtype() < TD_LAST && selobj->surface == &defSurface)
-        selobj->surface = xscDefSurface;
+    TDGroup *clipBrdObj = ((TDGroup*)clippboardBr->getData());
+    if (clipBrdObj != NULL && clipBrdObj->getOtype() > TD_FIRST && clipBrdObj->getOtype() < TD_LAST && clipBrdObj->surface == &defSurface)
+        clipBrdObj->surface = xscDefSurface;
 
     switch (pasteOp) {
     case ID_OTREE_PASTE_A:
